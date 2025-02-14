@@ -7,9 +7,6 @@ import _dmp.setd_server.util.JWTUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @RestController
 @RequestMapping("/api/auth")
 public class UserController {
