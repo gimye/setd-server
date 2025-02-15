@@ -1,5 +1,6 @@
 package _dmp.setd_server.util;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,11 +32,15 @@ public class JWTUtil {
     }
 
     public String validateToken(String token) {
-        return Jwts.parser()
+        return extractUsername(token);
+    }
+
+    public String extractUsername(String token) {
+        Claims claims = Jwts.parser()
                 .verifyWith(getSigningKey())
                 .build()
                 .parseSignedClaims(token)
-                .getPayload()
-                .getSubject();
+                .getPayload();
+        return claims.getSubject();
     }
 }
