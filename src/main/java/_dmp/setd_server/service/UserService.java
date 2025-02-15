@@ -6,6 +6,8 @@ import _dmp.setd_server.repository.UserRepository;
 import _dmp.setd_server.util.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UserService {
 
@@ -36,6 +38,24 @@ public class UserService {
 
     public void deleteUser(Long userId) {
         userRepository.deleteById(userId);
+    }
+
+    public UserResponseDTO updateNickname(String username, String newNickname) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with username: " + username));
+
+        user.setNickname(newNickname);
+        User updatedUser = userRepository.save(user);
+        UserResponseDTO dto = new UserResponseDTO();
+        dto.setId(updatedUser.getId());
+        dto.setUsername(updatedUser.getUsername());
+        dto.setNickname(updatedUser.getNickname());
+
+        return dto;
+    }
+
+    public Optional<User> findUser(Long userId) {
+        return userRepository.findById(userId);
     }
 
     public UserResponseDTO getUserResponseDTO(User user) {
