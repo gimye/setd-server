@@ -54,8 +54,15 @@ public class UserController {
     // 로그아웃은 client 단에서 구현
     // 닉네임 변경 API
     @PatchMapping("/nickname")
-    public ResponseEntity<UserResponseDTO> updateNickname (
-            @RequestBody NicknameUpdateRequest request) {
-        return ResponseEntity.ok(userService.updateNickname(request.getUsername(), request.getNickname()));
+    public ResponseEntity<UserResponseDTO> updateNickname(
+            @RequestBody NicknameUpdateRequest request,
+            @RequestHeader("Authorization") String authHeader
+    ) {
+
+        // "Bearer " 제거
+        String token = authHeader.substring(7);
+        String username = jwtUtil.extractUsername(token);
+
+        return ResponseEntity.ok(userService.updateNickname(username, request.getNickname()));
     }
 }
