@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/users")
 public class UserController {
 
     private final UserService userService;
@@ -19,6 +19,7 @@ public class UserController {
         this.jwtUtil = jwtUtil;
     }
 
+    // 회원가입 API
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody RegisterRequest registerRequest) {
         try {
@@ -31,6 +32,7 @@ public class UserController {
         }
     }
 
+    // Login API
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest){
         User user = userService.loginUser(loginRequest.getUsername(), loginRequest.getPassword());
@@ -42,9 +44,18 @@ public class UserController {
         return ResponseEntity.badRequest().body("Invalid username or password");
     }
 
+    // 회원탈퇴 API
     @DeleteMapping("/{userId}")
     public ResponseEntity<?> deleteUser(@PathVariable Long userId) {
         userService.deleteUser(userId);
         return ResponseEntity.ok("User deleted successfully");
+    }
+
+    // 로그아웃은 client 단에서 구현
+    // 닉네임 변경 API
+    @PatchMapping("/nickname")
+    public ResponseEntity<UserResponseDTO> updateNickname (
+            @RequestBody NicknameUpdateRequest request) {
+        return ResponseEntity.ok(userService.updateNickname(request.getUsername(), request.getNickname()));
     }
 }
