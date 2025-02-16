@@ -1,6 +1,10 @@
 package _dmp.setd_server.controller;
 
-import _dmp.setd_server.dto.*;
+import _dmp.setd_server.dto.request.LoginRequest;
+import _dmp.setd_server.dto.request.NicknameUpdateRequest;
+import _dmp.setd_server.dto.request.RegisterRequest;
+import _dmp.setd_server.dto.response.LoginResponse;
+import _dmp.setd_server.dto.response.UserResponse;
 import _dmp.setd_server.entity.User;
 import _dmp.setd_server.service.UserService;
 import _dmp.setd_server.util.JWTUtil;
@@ -26,7 +30,7 @@ public class UserController {
             User user = userService.registerUser(registerRequest.getUsername(),
                     registerRequest.getPassword(), registerRequest.getNickname());
             String token = jwtUtil.generateToken(user.getUsername());
-            return ResponseEntity.ok(new JwtResponse(token));
+            return ResponseEntity.ok(user);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("중복된 아이디입니다.");
         }
@@ -38,23 +42,25 @@ public class UserController {
         User user = userService.loginUser(loginRequest.getUsername(), loginRequest.getPassword());
         if(user!=null){
             String token = jwtUtil.generateToken(user.getUsername());
-            UserResponseDTO userResponseDTO = userService.getUserResponseDTO(user);
-            return  ResponseEntity.ok(new LoginResponse(token, userResponseDTO));
+            UserResponse userResponse = userService.getUserResponseDTO(user);
+            return  ResponseEntity.ok(new LoginResponse(token, userResponse));
         }
         return ResponseEntity.badRequest().body("Invalid username or password");
     }
 
     // 회원탈퇴 API
-    @DeleteMapping("/{userId}")
-    public ResponseEntity<?> deleteUser(@PathVariable Long userId) {
-        userService.deleteUser(userId);
+    @DeleteMapping
+    public ResponseEntity<?> deleteUser(@RequestHeader("Authorization") String authHeader) {
+        String username = jwtUtil.extractUsername(authHeader.substring(7));
+        userService.deleteUser(username);
         return ResponseEntity.ok("User deleted successfully");
     }
 
     // 로그아웃은 client 단에서 구현
+
     // 닉네임 변경 API
     @PatchMapping("/nickname")
-    public ResponseEntity<UserResponseDTO> updateNickname(
+    public ResponseEntity<UserResponse> updateNickname(
             @RequestBody NicknameUpdateRequest request,
             @RequestHeader("Authorization") String authHeader
     ) {

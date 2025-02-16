@@ -1,4 +1,4 @@
-package _dmp.setd_server.dto;
+package _dmp.setd_server.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,5 +7,5 @@ import lombok.Data;
 @AllArgsConstructor
 public class LoginResponse {
     private String token;
-    private UserResponseDTO user;
+    private UserResponse user;
 }

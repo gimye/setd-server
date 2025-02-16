@@ -1,4 +1,4 @@
-package _dmp.setd_server.dto;
+package _dmp.setd_server.dto.request;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -8,7 +8,5 @@ import java.time.LocalDate;
 @Setter
 public class TodoUpdateRequest {
     private String title;
-    private LocalDate startDate;
-    private LocalDate endDate;
-    private String repeatDays;
+    private LocalDate date;
 }

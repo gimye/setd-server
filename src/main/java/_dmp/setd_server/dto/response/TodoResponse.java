@@ -1,26 +1,24 @@
-package _dmp.setd_server.dto;
+package _dmp.setd_server.dto.response;
 
 import lombok.Getter;
 import lombok.AllArgsConstructor;
 import _dmp.setd_server.entity.Todo;
+import lombok.Setter;
+
 import java.time.LocalDate;
 
-@Getter
+@Getter @Setter
 @AllArgsConstructor
 public class TodoResponse {
     private Long id;
     private String title;
-    private LocalDate startDate;
-    private LocalDate endDate;
-    private String repeatDays;
+    private LocalDate date;
 
     public static TodoResponse from(Todo todo) {
         return new TodoResponse(
                 todo.getId(),
                 todo.getTitle(),
-                todo.getStartDate(),
-                todo.getEndDate(),
-                todo.getRepeatDays()
+                todo.getDate()
         );
     }
 }

@@ -5,24 +5,36 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "todos")
+@Table(name="finance_entries")
 @Getter @Setter
 @NoArgsConstructor
-public class Todo {
+public class FinanceEntry {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
+    private String title;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @Column(nullable = false)
-    private String title;
+    private BigDecimal amount;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private FinanceType type;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tag_id")
+    private Tag tag;
 
     @Column(nullable = false)
     private LocalDate date;
@@ -36,3 +48,4 @@ public class Todo {
     @Column(name = "repeat_days")
     private String repeatDays;
 }
+
