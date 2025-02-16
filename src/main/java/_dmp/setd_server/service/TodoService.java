@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,19 +23,56 @@ public class TodoService {
     private final UserRepository userRepository;
 
     @Transactional
-    public TodoResponse createTodo(String username, TodoRequest request) {
+    public List<TodoResponse> createTodo(String username, TodoRequest request) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
-        Todo todo = new Todo();
-        todo.setUser(user);
-        todo.setTitle(request.getTitle());
-        todo.setStartDate(request.getStartDate());
-        todo.setEndDate(request.getEndDate());
-        todo.setRepeatDays(request.getRepeatDays());
+        List<LocalDate> dates = calculateRecurringDates(
+                request.getStartDate(),
+                request.getEndDate(),
+                request.getRepeatDays()
+        );
 
-        Todo savedTodo = todoRepository.save(todo);
-        return TodoResponse.from(savedTodo);
+        List<Todo> todos = dates.stream()
+                .map(date -> {
+                    Todo todo = new Todo();
+                    todo.setUser(user);
+                    todo.setTitle(request.getTitle());
+                    todo.setDate(date);
+                    todo.setOriginalStartDate(request.getStartDate());
+                    todo.setOriginalEndDate(request.getEndDate());
+                    todo.setRepeatDays(request.getRepeatDays());
+                    return todo;
+                })
+                .toList();
+
+        List<Todo> savedTodos = todoRepository.saveAll(todos);
+        return savedTodos.stream()
+                .map(TodoResponse::from)
+                .toList();
+    }
+
+    private List<LocalDate> calculateRecurringDates(LocalDate start, LocalDate end, String repeatDays) {
+        List<LocalDate> dates = new ArrayList<>();
+        LocalDate current = start;
+
+        while (!current.isAfter(end)) {
+            if (shouldIncludeDate(current, repeatDays, start)) {
+                dates.add(current);
+            }
+            current = current.plusDays(1);
+        }
+
+        return dates;
+    }
+
+    private boolean shouldIncludeDate(LocalDate date, String repeatDays, LocalDate start) {
+        if (repeatDays == null || repeatDays.isEmpty()) {
+            return date.equals(start);
+        }
+
+        int dayOfWeek = date.getDayOfWeek().getValue() % 7;
+        return repeatDays.contains(String.valueOf(dayOfWeek));
     }
 
     @Transactional
@@ -49,14 +87,8 @@ public class TodoService {
         if (request.getTitle() != null) {
             todo.setTitle(request.getTitle());
         }
-        if (request.getStartDate() != null) {
-            todo.setStartDate(request.getStartDate());
-        }
-        if (request.getEndDate() != null) {
-            todo.setEndDate(request.getEndDate());
-        }
-        if (request.getRepeatDays() != null) {
-            todo.setRepeatDays(request.getRepeatDays());
+        if (request.getDate() != null) {
+            todo.setDate(request.getDate());
         }
 
         Todo updatedTodo = todoRepository.save(todo);
@@ -75,10 +107,24 @@ public class TodoService {
         todoRepository.delete(todo);
     }
 
-    public List<TodoResponse> getTodos(String username, LocalDate start, LocalDate end) {
-        return todoRepository.findByUserUsernameAndStartDateBetween(username, start, end)
+//    public List<TodoResponse> getTodos(String username, LocalDate start, LocalDate end) {
+//        return todoRepository.findByUserUsernameAndDateBetween(username, start, end)
+//                .stream()
+//                .map(TodoResponse::from)
+//                .toList();
+//    }
+
+    public List<LocalDate> getMonthlyTodoExistence(String username, int year, int month) {
+        LocalDate startOfMonth = LocalDate.of(year, month, 1);
+        LocalDate endOfMonth = startOfMonth.withDayOfMonth(startOfMonth.lengthOfMonth());
+
+        return todoRepository.findDistinctDatesByUserUsernameAndDateBetween(username, startOfMonth, endOfMonth);
+    }
+
+    public List<TodoResponse> getDailyTodos(String username, LocalDate date) {
+        return todoRepository.findByUserUsernameAndDate(username, date)
                 .stream()
                 .map(TodoResponse::from)
-                .collect(Collectors.toList());
+                .toList();
     }
 }

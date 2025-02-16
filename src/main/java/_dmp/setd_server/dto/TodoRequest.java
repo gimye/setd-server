@@ -15,7 +15,6 @@ public class TodoRequest {
     @NotNull
     private LocalDate startDate;
 
-    @NotNull
     private LocalDate endDate;
 
     private String repeatDays;

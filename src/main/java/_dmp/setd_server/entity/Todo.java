@@ -24,11 +24,14 @@ public class Todo {
     @Column(nullable = false)
     private String title;
 
-    @Column(name = "start_date", nullable = false)
-    private LocalDate startDate;
+    @Column(nullable = false)
+    private LocalDate date;
 
-    @Column(name = "end_date", nullable = false)
-    private LocalDate endDate;
+    @Column(name = "original_start_date", nullable = false)
+    private LocalDate originalStartDate;
+
+    @Column(name = "original_end_date")
+    private LocalDate originalEndDate;
 
     @Column(name = "repeat_days")
     private String repeatDays;

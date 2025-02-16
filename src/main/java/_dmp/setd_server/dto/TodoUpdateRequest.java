@@ -8,7 +8,5 @@ import java.time.LocalDate;
 @Setter
 public class TodoUpdateRequest {
     private String title;
-    private LocalDate startDate;
-    private LocalDate endDate;
-    private String repeatDays;
+    private LocalDate date;
 }
