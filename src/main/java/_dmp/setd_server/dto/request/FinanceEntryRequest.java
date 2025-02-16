@@ -1,4 +1,4 @@
-package _dmp.setd_server.dto;
+package _dmp.setd_server.dto.request;
 
 import _dmp.setd_server.entity.FinanceType;
 import jakarta.validation.constraints.NotNull;

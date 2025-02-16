@@ -1,7 +1,7 @@
 package _dmp.setd_server.controller;
 
-import _dmp.setd_server.dto.TagRequest;
-import _dmp.setd_server.dto.TagResponse;
+import _dmp.setd_server.dto.request.TagRequest;
+import _dmp.setd_server.dto.response.TagResponse;
 import _dmp.setd_server.service.TagService;
 import _dmp.setd_server.util.JWTUtil;
 import jakarta.validation.Valid;

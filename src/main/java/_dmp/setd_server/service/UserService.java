@@ -1,6 +1,6 @@
 package _dmp.setd_server.service;
 
-import _dmp.setd_server.dto.UserResponseDTO;
+import _dmp.setd_server.dto.response.UserResponse;
 import _dmp.setd_server.entity.Tag;
 import _dmp.setd_server.entity.User;
 import _dmp.setd_server.repository.TagRepository;
@@ -71,13 +71,13 @@ public class UserService {
         userRepository.delete(user);
     }
 
-    public UserResponseDTO updateNickname(String username, String newNickname) {
+    public UserResponse updateNickname(String username, String newNickname) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("User not found with username: " + username));
 
         user.setNickname(newNickname);
         User updatedUser = userRepository.save(user);
-        UserResponseDTO dto = new UserResponseDTO();
+        UserResponse dto = new UserResponse();
         dto.setId(updatedUser.getId());
         dto.setUsername(updatedUser.getUsername());
         dto.setNickname(updatedUser.getNickname());
@@ -89,8 +89,8 @@ public class UserService {
         return userRepository.findById(userId);
     }
 
-    public UserResponseDTO getUserResponseDTO(User user) {
-        UserResponseDTO dto = new UserResponseDTO();
+    public UserResponse getUserResponseDTO(User user) {
+        UserResponse dto = new UserResponse();
         dto.setId(user.getId());
         dto.setUsername(user.getUsername());
         dto.setNickname(user.getNickname());

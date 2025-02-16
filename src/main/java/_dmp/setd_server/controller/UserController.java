@@ -1,6 +1,10 @@
 package _dmp.setd_server.controller;
 
-import _dmp.setd_server.dto.*;
+import _dmp.setd_server.dto.request.LoginRequest;
+import _dmp.setd_server.dto.request.NicknameUpdateRequest;
+import _dmp.setd_server.dto.request.RegisterRequest;
+import _dmp.setd_server.dto.response.LoginResponse;
+import _dmp.setd_server.dto.response.UserResponse;
 import _dmp.setd_server.entity.User;
 import _dmp.setd_server.service.UserService;
 import _dmp.setd_server.util.JWTUtil;
@@ -38,8 +42,8 @@ public class UserController {
         User user = userService.loginUser(loginRequest.getUsername(), loginRequest.getPassword());
         if(user!=null){
             String token = jwtUtil.generateToken(user.getUsername());
-            UserResponseDTO userResponseDTO = userService.getUserResponseDTO(user);
-            return  ResponseEntity.ok(new LoginResponse(token, userResponseDTO));
+            UserResponse userResponse = userService.getUserResponseDTO(user);
+            return  ResponseEntity.ok(new LoginResponse(token, userResponse));
         }
         return ResponseEntity.badRequest().body("Invalid username or password");
     }
@@ -56,7 +60,7 @@ public class UserController {
 
     // 닉네임 변경 API
     @PatchMapping("/nickname")
-    public ResponseEntity<UserResponseDTO> updateNickname(
+    public ResponseEntity<UserResponse> updateNickname(
             @RequestBody NicknameUpdateRequest request,
             @RequestHeader("Authorization") String authHeader
     ) {

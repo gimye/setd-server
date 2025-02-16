@@ -1,13 +1,12 @@
 package _dmp.setd_server.controller;
 
-import _dmp.setd_server.dto.TodoRequest;
-import _dmp.setd_server.dto.TodoResponse;
-import _dmp.setd_server.dto.TodoUpdateRequest;
+import _dmp.setd_server.dto.request.TodoRequest;
+import _dmp.setd_server.dto.response.TodoResponse;
+import _dmp.setd_server.dto.request.TodoUpdateRequest;
 import _dmp.setd_server.service.TodoService;
 import _dmp.setd_server.util.JWTUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

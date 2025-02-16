@@ -1,7 +1,7 @@
 package _dmp.setd_server.service;
 
-import _dmp.setd_server.dto.TagRequest;
-import _dmp.setd_server.dto.TagResponse;
+import _dmp.setd_server.dto.request.TagRequest;
+import _dmp.setd_server.dto.response.TagResponse;
 import _dmp.setd_server.entity.Tag;
 import _dmp.setd_server.entity.User;
 import _dmp.setd_server.repository.TagRepository;

@@ -1,6 +1,6 @@
 package _dmp.setd_server.repository;
 
-import _dmp.setd_server.dto.TagFinanceStatsResponse;
+import _dmp.setd_server.dto.response.TagFinanceStatsResponse;
 import _dmp.setd_server.entity.FinanceEntry;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -8,10 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Locale;
 import java.util.List;
-import java.util.Optional;
 
 public interface FinanceEntryRepository extends JpaRepository<FinanceEntry, Long> {
 
@@ -24,7 +21,7 @@ public interface FinanceEntryRepository extends JpaRepository<FinanceEntry, Long
             @Param("end") LocalDate end
     );
 
-    @Query("SELECT new _dmp.setd_server.dto.TagFinanceStatsResponse(t.id, t.name, " +
+    @Query("SELECT new _dmp.setd_server.dto.response.TagFinanceStatsResponse(t.id, t.name, " +
             "COALESCE(SUM(CASE WHEN f.type = 'INCOME' THEN f.amount ELSE 0 END), 0), " +
             "COALESCE(SUM(CASE WHEN f.type = 'EXPENSE' THEN f.amount ELSE 0 END), 0)) " +
             "FROM FinanceEntry f JOIN f.tag t " +

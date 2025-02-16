@@ -1,4 +1,4 @@
-package _dmp.setd_server.dto;
+package _dmp.setd_server.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

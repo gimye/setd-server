@@ -1,4 +1,4 @@
-package _dmp.setd_server.dto;
+package _dmp.setd_server.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

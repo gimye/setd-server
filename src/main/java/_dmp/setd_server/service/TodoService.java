@@ -1,8 +1,8 @@
 package _dmp.setd_server.service;
 
-import _dmp.setd_server.dto.TodoRequest;
-import _dmp.setd_server.dto.TodoResponse;
-import _dmp.setd_server.dto.TodoUpdateRequest;
+import _dmp.setd_server.dto.request.TodoRequest;
+import _dmp.setd_server.dto.response.TodoResponse;
+import _dmp.setd_server.dto.request.TodoUpdateRequest;
 import _dmp.setd_server.entity.Todo;
 import _dmp.setd_server.entity.User;
 import _dmp.setd_server.repository.TodoRepository;
@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
