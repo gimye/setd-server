@@ -73,7 +73,7 @@ public class TodoController {
     }
 
     // 일별 할 일 상세 조회 API
-    @GetMapping("/{year}/{month}/{day}")
+    @GetMapping("/daily/{year}/{month}/{day}")
     public ResponseEntity<List<TodoResponse>> getDailyTodos(
             @PathVariable int year,
             @PathVariable int month,

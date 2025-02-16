@@ -26,7 +26,7 @@ public class UserController {
             User user = userService.registerUser(registerRequest.getUsername(),
                     registerRequest.getPassword(), registerRequest.getNickname());
             String token = jwtUtil.generateToken(user.getUsername());
-            return ResponseEntity.ok(new JwtResponse(token));
+            return ResponseEntity.ok(user);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("중복된 아이디입니다.");
         }
@@ -45,13 +45,15 @@ public class UserController {
     }
 
     // 회원탈퇴 API
-    @DeleteMapping("/{userId}")
-    public ResponseEntity<?> deleteUser(@PathVariable Long userId) {
-        userService.deleteUser(userId);
+    @DeleteMapping
+    public ResponseEntity<?> deleteUser(@RequestHeader("Authorization") String authHeader) {
+        String username = jwtUtil.extractUsername(authHeader.substring(7));
+        userService.deleteUser(username);
         return ResponseEntity.ok("User deleted successfully");
     }
 
     // 로그아웃은 client 단에서 구현
+
     // 닉네임 변경 API
     @PatchMapping("/nickname")
     public ResponseEntity<UserResponseDTO> updateNickname(
